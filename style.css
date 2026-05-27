@@ -1329,6 +1329,12 @@ main,
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  transition: transform 0.3s var(--ease);
+}
+
+.project-exhibit:hover span,
+.signal-link:hover span {
+  transform: translateY(-2px);
 }
 
 .sub-grid strong {
@@ -1595,12 +1601,24 @@ main,
   margin: 0;
   font-family: var(--font-serif);
   font-size: clamp(1.6rem, 3.5vw, 3rem);
+  transition: color 0.3s ease, transform 0.3s var(--ease);
+}
+
+.project-exhibit:hover h2 {
+  color: var(--acid);
+  transform: translateX(4px);
 }
 
 .project-exhibit p,
 .project-exhibit small {
   color: var(--muted);
   line-height: 1.7;
+  transition: color 0.3s ease;
+}
+
+.project-exhibit:hover p,
+.project-exhibit:hover small {
+  color: var(--text);
 }
 
 .sound-room {
@@ -1608,6 +1626,18 @@ main,
   grid-template-columns: minmax(18rem, 0.8fr) 1fr;
   gap: clamp(2rem, 6vw, 6rem);
   align-items: center;
+  position: relative;
+}
+
+.sound-room::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--line), transparent);
+  transform: translateX(-50%);
 }
 
 .vinyl-installation {
@@ -1702,11 +1732,33 @@ main,
     86% 28%,
     100% 58%
   );
+  transition: clip-path 0.6s var(--ease);
+}
+
+.wave-row:hover span {
+  clip-path: polygon(
+    0 45%,
+    7% 30%,
+    14% 62%,
+    22% 44%,
+    31% 52%,
+    42% 28%,
+    52% 64%,
+    64% 48%,
+    75% 58%,
+    86% 38%,
+    100% 48%
+  );
 }
 
 .wave-row strong {
   font-family: var(--font-serif);
   font-size: 1.15rem;
+  transition: color 0.3s ease;
+}
+
+.wave-row:hover strong {
+  color: var(--acid);
 }
 
 .manuscript-wall {
@@ -1715,6 +1767,17 @@ main,
   gap: 1.5rem;
   max-width: 76rem;
   margin: 0 auto;
+  position: relative;
+}
+
+.manuscript-wall::before {
+  content: "";
+  position: absolute;
+  top: -1rem;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
 }
 
 .manuscript-card {
@@ -1725,19 +1788,19 @@ main,
   background: var(--paper);
   color: var(--ink);
   transform: rotate(var(--tilt, -1deg)) translateY(0);
-  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.3s ease;
   opacity: 0;
-  animation: manuscriptFadeIn 0.6s calc(var(--delay) * 0.1s) forwards;
+  animation: manuscriptFadeIn 0.7s calc(var(--delay) * 0.12s) forwards;
 }
 
 @keyframes manuscriptFadeIn {
   from {
     opacity: 0;
-    transform: rotate(var(--tilt, -1deg)) translateY(20px);
+    transform: rotate(var(--tilt, -1deg)) translateY(30px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: rotate(var(--tilt, -1deg)) translateY(0);
+    transform: rotate(var(--tilt, -1deg)) translateY(0) scale(1);
   }
 }
 
@@ -1768,9 +1831,10 @@ main,
 }
 
 .manuscript-card:hover {
-  transform: rotate(0deg) translateY(-8px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: rotate(0deg) translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 0 8px 20px rgba(0, 0, 0, 0.15);
   z-index: 2;
+  border-color: rgba(215, 255, 73, 0.3);
 }
 
 .manuscript-pin {
@@ -1783,6 +1847,12 @@ main,
   border-radius: 50%;
   transform: translateX(-50%);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s ease;
+}
+
+.manuscript-card:hover .manuscript-pin {
+  transform: translateX(-50%) scale(1.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .manuscript-card:nth-child(even) .manuscript-pin {
@@ -1800,6 +1870,11 @@ main,
   font-size: 0.72rem;
   color: rgba(21, 17, 11, 0.5);
   letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+}
+
+.manuscript-card:hover time {
+  color: var(--ink);
 }
 
 .manuscript-wall p {
@@ -1808,6 +1883,11 @@ main,
   font-size: clamp(1.1rem, 1.5vw, 1.35rem);
   line-height: 1.6;
   color: var(--ink);
+  transition: color 0.3s ease;
+}
+
+.manuscript-card:hover p {
+  color: #2a2418;
 }
 
 .manuscript-tag {
@@ -1821,12 +1901,13 @@ main,
   letter-spacing: 0.06em;
   text-transform: uppercase;
   border-radius: 2px;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.3s, color 0.3s, transform 0.3s var(--ease);
 }
 
 .manuscript-card:hover .manuscript-tag {
-  background: rgba(21, 17, 11, 0.15);
+  background: rgba(215, 255, 73, 0.2);
   color: var(--ink);
+  transform: translateY(-2px);
 }
 
 .manuscript-footer {
@@ -1841,10 +1922,21 @@ main,
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.05em;
+  animation: manuscriptFooter 2s ease-in-out infinite;
+}
+
+@keyframes manuscriptFooter {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 .manuscript-hint {
   opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.manuscript-footer:hover .manuscript-hint {
+  opacity: 1;
 }
 
 .signal-board {
@@ -1946,6 +2038,11 @@ main,
   font-size: clamp(1.1rem, 1.5vw, 1.35rem);
   line-height: 1.7;
   color: var(--muted);
+  transition: color 0.3s ease;
+}
+
+.about-card--main:hover p {
+  color: var(--text);
 }
 
 .about-card-decoration {
@@ -2044,7 +2141,7 @@ main,
   min-height: 14rem;
   padding: 1.3rem;
   background: #070707;
-  transition: transform 0.3s var(--ease), background 0.3s var(--ease);
+  transition: transform 0.35s var(--ease), background 0.35s var(--ease), box-shadow 0.35s ease;
   position: relative;
   overflow: hidden;
 }
@@ -2056,14 +2153,15 @@ main,
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(215, 255, 73, 0.05), transparent);
+  background: linear-gradient(90deg, transparent, rgba(215, 255, 73, 0.08), transparent);
   transition: left 0.6s var(--ease);
   pointer-events: none;
 }
 
 .signal-link:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   background: #0a0a0a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .signal-link:hover::before {
@@ -2075,6 +2173,12 @@ main,
   margin-top: 4rem;
   font-family: var(--font-serif);
   font-size: clamp(1.3rem, 2.5vw, 2rem);
+  transition: color 0.3s ease, transform 0.3s var(--ease);
+}
+
+.signal-link:hover strong {
+  color: var(--acid);
+  transform: translateX(4px);
 }
 
 /* ================================
