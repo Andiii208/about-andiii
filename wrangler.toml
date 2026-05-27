@@ -1,5 +1,6 @@
 name = "about-andiii"
 compatibility_date = "2024-01-01"
+pages_build_output_dir = "."
 
 [vars]
 AI_API_BASE = "https://api.deepseek.com/v1"
