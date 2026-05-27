@@ -9,3 +9,14 @@ optimize-images.js
 update-html.js
 package.json
 package-lock.json
+# 原始图片（只保留优化后的）
+photos/*.jpg
+photos/*.jpeg
+photos/*.png
+# 上传的文件
+.uploads/
+# 日志文件
+*.log
+# 系统文件
+.DS_Store
+Thumbs.db
