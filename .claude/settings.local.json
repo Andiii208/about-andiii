@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__playwright__browser_navigate",
+      "Bash(where clawd *)",
+      "Bash(npm list *)",
+      "Bash(tasklist)",
+      "Bash(npm root *)",
+      "WebSearch",
+      "Bash(netstat -ano)",
+      "Bash(reg query *)",
+      "mcp__github__search_repositories",
+      "Bash(curl -s https://api.github.com/repos/rullerzhou-afk/clawd-on-desk/releases/latest)",
+      "Bash(curl -L -o \"Clawd-on-Desk-Setup-0.8.0-x64.exe\" \"https://github.com/rullerzhou-afk/clawd-on-desk/releases/download/v0.8.0/Clawd-on-Desk-Setup-0.8.0-x64.exe\")",
+      "Bash(curl -L --ssl-no-revoke -o \"Clawd-on-Desk-Setup-0.8.0-x64.exe\" \"https://github.com/rullerzhou-afk/clawd-on-desk/releases/download/v0.8.0/Clawd-on-Desk-Setup-0.8.0-x64.exe\")",
+      "Bash(gh release *)",
+      "Bash(ping github.com -n 1)",
+      "Bash(powershell.exe *)",
+      "Bash(/c/Users/26895/Downloads/Clawd-on-Desk-Setup-0.8.0-x64.exe *)"
+    ]
+  }
+}

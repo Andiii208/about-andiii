@@ -1,0 +1,28 @@
+{
+  "slug": "andiii",
+  "persona": "self",
+  "built_at": "2026-05-26T00:00:00Z",
+  "sources_summarized": [
+    "QQ 私聊: 周子轶 (13962条)",
+    "QQ 私聊: 陆易正奇 (10465条)",
+    "QQ 私聊: 胡琛睿 (9528条)",
+    "QQ 私聊: 刘彦邦 (6371条)",
+    "QQ 私聊: 余子洋 (2242条)",
+    "QQ 私聊: 张诗婧 (475条)",
+    "QQ 群聊: 压抑且66 (7607条)",
+    "QQ 群聊: 谁给我起一个 (831条)"
+  ],
+  "platforms": ["QQ"],
+  "kit": "immortal-skill",
+  "dimensions": ["interaction", "procedure", "memory", "personality"],
+  "evidence": {
+    "interaction": { "verbatim": 45, "artifact": 12, "impression": 5 },
+    "procedure": { "verbatim": 30, "artifact": 8, "impression": 4 },
+    "memory": { "verbatim": 50, "artifact": 10, "impression": 6 },
+    "personality": { "verbatim": 35, "artifact": 10, "impression": 8 }
+  },
+  "ethics_note": "self-backup",
+  "time_range": "2025-06-14 to 2026-05-21",
+  "total_messages": 51481,
+  "coverage": "full_first_year_of_college"
+}

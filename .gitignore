@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.superpowers/
+dist/
+coverage/
+optimize-images.js
+update-html.js
+package.json
+package-lock.json

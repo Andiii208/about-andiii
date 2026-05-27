@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Andiii 的数字美术馆：摄影、代码、音乐、碎片与数字分身。"
+    />
+    <title>Andiii · Digital Museum</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,700&family=IBM+Plex+Mono:wght@300;400;500&family=Noto+Serif+SC:wght@500;700;900&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="loader" id="loader" aria-label="正在入馆">
+      <div class="loader-mark">A.</div>
+      <div class="loader-track">
+        <span class="loader-fill" id="loaderFill"></span>
+      </div>
+      <div class="loader-text">opening the gallery</div>
+    </div>
+
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+    <div class="grain-overlay"></div>
+    <canvas id="threeCanvas" aria-hidden="true"></canvas>
+
+    <nav class="nav" id="nav" aria-label="主导航">
+      <a class="nav-logo" id="navLogo" href="#" aria-label="回到入口">A.</a>
+      <div class="nav-links">
+        <a class="nav-link" href="#about" data-section="about">关于</a>
+        <a class="nav-link" href="#world" data-section="world">展室</a>
+        <a class="nav-link" href="#thoughts" data-section="thoughts">碎片</a>
+        <a class="nav-link" href="#contact" data-section="contact">联系</a>
+      </div>
+    </nav>
+
+    <div class="back-hint" id="backHint">点击 A. 返回入口展厅</div>
+
+    <main id="mainContent">
+      <section class="section hero" id="hero" data-room="00">
+        <div class="hero-kicker">
+          <span>Digital Museum</span>
+          <span>SEU / Nanjing</span>
+          <span>2026</span>
+        </div>
+        <div class="hero-content">
+          <p class="hero-eyebrow" id="heroEyebrow">私人展馆 · 夜间开放</p>
+          <h1 class="hero-title" id="heroTitle">Andiii</h1>
+          <p class="hero-subtitle" id="heroSubtitle">
+            摄影、Vibe、R&B 和那些不太愿意被分类的瞬间，被临时安放在这里。
+          </p>
+        </div>
+        <div class="hero-decoration">
+          <div class="hero-circle hero-circle--1"></div>
+          <div class="hero-circle hero-circle--2"></div>
+          <div class="hero-circle hero-circle--3"></div>
+        </div>
+        <div class="hero-caption">
+          <span>scroll to enter</span>
+          <i></i>
+        </div>
+      </section>
+
+      <section class="section about" id="about" data-room="01">
+        <div class="section-label">
+          <span>Gallery 01</span>
+          <strong>Curatorial Note</strong>
+        </div>
+        <div class="about-layout">
+          <div class="about-copy">
+            <p class="section-small">关于 Andiii</p>
+            <h2 class="section-title">
+              我把生活里发光的东西，做成一间可以走进去的房间。
+            </h2>
+          </div>
+          <div class="statement-panel" id="depthCard">
+            <div class="statement-orbit"></div>
+            <p>
+              不是简历，也不是作品墙。这里更像一个正在搭建的展览：有影像、代码、深夜歌单，也有一些不成熟但很想留下来的念头。
+            </p>
+            <span>做有意思的东西</span>
+          </div>
+        </div>
+        <div class="archive-strip">
+          <button class="archive-item" data-page="about">
+            <span>01</span>
+            <strong>身份档案</strong>
+            <em>About Andiii</em>
+          </button>
+          <button class="archive-item" data-page="contact">
+            <span>02</span>
+            <strong>人格回声</strong>
+            <em>Digital Twin</em>
+          </button>
+          <button class="archive-item" data-page="thoughts">
+            <span>03</span>
+            <strong>未归档碎片</strong>
+            <em>Notes</em>
+          </button>
+        </div>
+        <div class="about-decoration">
+          <div class="about-line about-line--1"></div>
+          <div class="about-line about-line--2"></div>
+        </div>
+      </section>
+
+      <section class="section world" id="world" data-room="02">
+        <div class="section-label">
+          <span>Gallery 02</span>
+          <strong>Exhibition Rooms</strong>
+        </div>
+        <div class="world-heading">
+          <p class="section-small">三间长期开放的展室</p>
+          <h2 class="section-title">把兴趣当作入口，把网页当作空间。</h2>
+        </div>
+        <div class="world-grid">
+          <button class="world-card" data-page="photography">
+            <span class="card-index">Room A</span>
+            <strong>光影笔记</strong>
+            <p>抽象影像、取景框、还没被上传的照片。</p>
+            <i>enter</i>
+          </button>
+          <button class="world-card" data-page="coding">
+            <span class="card-index">Room B</span>
+            <strong>Vibe 展柜</strong>
+            <p>把想法变成可运行的东西，像把草图烧成玻璃。</p>
+            <i>enter</i>
+          </button>
+          <button class="world-card" data-page="music">
+            <span class="card-index">Room C</span>
+            <strong>夜间声场</strong>
+            <p>R&B、声波、唱片和适合发呆的低频。</p>
+            <i>enter</i>
+          </button>
+        </div>
+      </section>
+
+      <section class="section thoughts" id="thoughts" data-room="03">
+        <div class="section-label">
+          <span>Gallery 03</span>
+          <strong>Fragments Wall</strong>
+        </div>
+        <div class="thoughts-layout">
+          <h2 class="section-title">散落的想法，不急着被解释。</h2>
+          <div class="thoughts-wall">
+            <button class="thought-tile" data-page="thoughts">
+              <span>2026.05</span>
+              <p>好的设计是看不见的。伟大的设计是忘不掉的。</p>
+            </button>
+            <button class="thought-tile" data-page="thoughts">
+              <span>2026.04</span>
+              <p>界面应该有呼吸。元素出现和消失都要有节奏。</p>
+            </button>
+            <button class="thought-tile" data-page="thoughts">
+              <span>2026.03</span>
+              <p>留白不是空，是音符之间的沉默。</p>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section contact" id="contact" data-room="04">
+        <div class="contact-stage">
+          <div class="section-label">
+            <span>Gallery 04</span>
+            <strong>Signal Desk</strong>
+          </div>
+          <p class="section-small">出口处有一台档案打印机</p>
+          <h2 class="contact-title">Say Hi</h2>
+          <div class="contact-links">
+            <button class="contact-link contact-link--chat" id="chatTrigger">
+              <span>和数字分身聊聊</span>
+              <i>print</i>
+            </button>
+            <a class="contact-link" href="mailto:2689573676@qq.com">
+              <span>Email</span>
+              <i>send</i>
+            </a>
+            <a
+              class="contact-link"
+              href="https://github.com/Andiii208"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>GitHub</span>
+              <i>view</i>
+            </a>
+            <a
+              class="contact-link"
+              href="https://xhslink.com/m/5JbZ80hRS0B"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>小红书</span>
+              <i>open</i>
+            </a>
+            <a
+              class="contact-link"
+              href="https://v.douyin.com/Zn47Gqcug0Q/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>抖音</span>
+              <i>open</i>
+            </a>
+          </div>
+          <p class="contact-footer">
+            &copy; 2026 Andiii · <span id="footerTime"></span>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <div id="pageContainer" class="page-container" hidden></div>
+
+    <div class="receipt-overlay" id="receiptOverlay" aria-hidden="true">
+      <div class="receipt-backdrop" id="receiptBackdrop"></div>
+      <section class="receipt-unit" aria-label="人格回声打印机">
+        <div class="printer-body">
+          <span class="printer-slot"></span>
+          <span class="printer-led" id="printerLed"></span>
+          <span class="printer-label">PERSONA ECHO / A-04</span>
+        </div>
+        <div class="receipt-paper" id="receiptPaper">
+          <button class="receipt-close" id="receiptClose" aria-label="关闭">
+            &times;
+          </button>
+          <header class="receipt-header">
+            <span>Andiii Archive</span>
+            <strong>人格回声</strong>
+            <time id="receiptDate"></time>
+          </header>
+          <div class="receipt-messages" id="receiptMessages">
+            <div class="receipt-msg receipt-msg--bot">
+              <div class="receipt-msg-label">andiii</div>
+              <div class="receipt-msg-text">ok，说吧。</div>
+            </div>
+          </div>
+          <form class="receipt-input-row" id="receiptForm">
+            <input
+              class="receipt-input"
+              id="receiptInput"
+              type="text"
+              placeholder="输入一条消息..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="receipt-send" id="receiptSend" type="submit">
+              send
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <template id="tpl-about">
+      <div class="sub-page sub-page--about">
+        <button class="page-back">&larr; 返回入口</button>
+        <header class="sub-hero">
+          <span>Archive 01</span>
+          <h1>关于<br /><em>Andiii</em></h1>
+          <p>一份不太正式的身份档案。</p>
+        </header>
+        <section class="about-profile">
+          <div class="about-avatar">
+            <div class="about-avatar-ring"></div>
+            <div class="about-avatar-inner">A.</div>
+          </div>
+          <div class="about-bio">
+            <article class="about-card about-card--main" style="--delay: 0">
+              <span class="about-card-label">Curatorial Statement</span>
+              <p>
+                东南大学软件工程专业学生。喜欢摄影、写东西、听 R&B，也喜欢把脑子里突然出现的东西做成能被打开的页面。
+              </p>
+              <div class="about-card-decoration"></div>
+            </article>
+            <div class="about-grid">
+              <article class="about-card" style="--delay: 1">
+                <span class="about-card-label">Location</span>
+                <strong>南京</strong>
+                <div class="about-card-icon">?</div>
+              </article>
+              <article class="about-card" style="--delay: 2">
+                <span class="about-card-label">Major</span>
+                <strong>软件工程</strong>
+                <div class="about-card-icon">{ }</div>
+              </article>
+              <article class="about-card" style="--delay: 3">
+                <span class="about-card-label">Interests</span>
+                <strong>Photography · Coding · R&B</strong>
+              </article>
+              <article class="about-card about-card--highlight" style="--delay: 4">
+                <span class="about-card-label">Belief</span>
+                <strong>好玩比好看更重要，但最好都要。</strong>
+              </article>
+            </div>
+          </div>
+        </section>
+        <div class="about-footer">
+          <span class="about-status">
+            <span class="about-status-dot"></span>
+            Currently in Nanjing
+          </span>
+          <span class="about-time" id="aboutTime"></span>
+        </div>
+      </div>
+    </template>
+
+    <template id="tpl-photography">
+      <div class="sub-page sub-page--photo">
+        <button class="page-back">&larr; 返回入口</button>
+        <header class="sub-hero">
+          <span>Room A</span>
+          <h1>光影<br /><em>笔记</em></h1>
+          <p>用镜头记录南京和旅途中的瞬间。</p>
+        </header>
+        <section class="photo-gallery">
+          <article class="photo-item photo-item--wide">
+            <img src="photos/optimized/02-sunset-seagulls.jpg" alt="夕阳下的海鸥" loading="lazy" width="800" height="533" />
+            <span>归途 · Sunset Seagulls / 2026</span>
+          </article>
+          <article class="photo-item photo-item--tall">
+            <img src="photos/optimized/03-plane-tree-avenue.jpg" alt="梧桐大道" loading="lazy" width="533" height="800" />
+            <span>梧桐深处 · Plane Tree Avenue / 2026</span>
+          </article>
+          <article class="photo-item">
+            <img src="photos/optimized/01-jimingsi.jpg" alt="鸡鸣寺樱花" loading="lazy" width="800" height="533" />
+            <span>春信 · Jimingsi / 2026</span>
+          </article>
+          <article class="photo-item">
+            <img src="photos/optimized/06-nanjing-bridge.jpg" alt="南京长江大桥" loading="lazy" width="800" height="533" />
+            <span>跨江 · Nanjing Bridge / 2026</span>
+          </article>
+          <article class="photo-item">
+            <img src="photos/optimized/04-bridge.jpg" alt="跨海大桥" loading="lazy" width="800" height="533" />
+            <span>远方 · Sea Bridge / 2026</span>
+          </article>
+          <article class="photo-item">
+            <img src="photos/optimized/07-silhouette-trees.jpg" alt="窗前梧桐" loading="lazy" width="800" height="533" />
+            <span>框景 · Window Frame / 2026</span>
+          </article>
+          <article class="photo-item photo-item--wide">
+            <img src="photos/optimized/08-cafe.jpg" alt="落地窗咖啡馆" loading="lazy" width="800" height="533" />
+            <span>午后 · Afternoon Light / 2026</span>
+          </article>
+          <article class="photo-item photo-item--tall">
+            <img src="photos/optimized/05-hotel-sea.jpg" alt="海天白云大酒店" loading="lazy" width="533" height="800" />
+            <span>海天 · Coastal View / 2026</span>
+          </article>
+          <article class="photo-item">
+            <img src="photos/optimized/09-ginkgo.jpg" alt="银杏蓝天" loading="lazy" width="800" height="533" />
+            <span>秋色 · Ginkgo Sky / 2026</span>
+          </article>
+          <article class="photo-item photo-item--wide">
+            <img src="photos/optimized/10-island.jpg" alt="湖中小岛" loading="lazy" width="800" height="533" />
+            <span>孤岛 · Island / 2026</span>
+          </article>
+          <article class="photo-item">
+            <img src="photos/optimized/11-sunset-silhouette.jpg" alt="日落剪影" loading="lazy" width="800" height="533" />
+            <span>剪影 · Silhouette / 2026</span>
+          </article>
+        </section>
+      </div>
+    </template>
+
+    <template id="tpl-coding">
+      <div class="sub-page sub-page--coding">
+        <button class="page-back">&larr; 返回入口</button>
+        <header class="sub-hero">
+          <span>Room B</span>
+          <h1>Vibe<br /><em>展柜</em></h1>
+          <p>项目先以展品形式陈列，真实链接之后替换。</p>
+        </header>
+        <section class="project-rail">
+          <article class="project-exhibit">
+            <span>ACTIVE</span>
+            <h2>About Andiii</h2>
+            <p>你正在看的这个网站。Three.js、GSAP、Lenis 和人格回声打印机。</p>
+            <small>HTML · CSS · JavaScript · Three.js</small>
+          </article>
+          <article class="project-exhibit">
+            <span>PLANNED</span>
+            <h2>AI Studio</h2>
+            <p>一组用 AI 辅助创作、整理资料和生成网页的实验。</p>
+            <small>Design · Prompt · Automation</small>
+          </article>
+          <article class="project-exhibit">
+            <span>PLANNED</span>
+            <h2>Visual Notes</h2>
+            <p>把学习、生活和灵感做成可浏览的视觉笔记系统。</p>
+            <small>Prototype · Archive · Interface</small>
+          </article>
+        </section>
+      </div>
+    </template>
+
+    <template id="tpl-music">
+      <div class="sub-page sub-page--music">
+        <button class="page-back">&larr; 返回入口</button>
+        <header class="sub-hero">
+          <span>Room C</span>
+          <h1>夜间<br /><em>声场</em></h1>
+          <p>深夜耳机里的五首歌，每首都是一个房间。</p>
+        </header>
+        <section class="sound-room">
+          <div class="vinyl-installation" id="vinylWrapper">
+            <div class="vinyl-glow" id="vinylGlow"></div>
+            <div class="vinyl-disc" id="vinylDisc">
+              <div class="vinyl-label" id="vinylLabel">
+                <span class="vinyl-label-title" id="vinylTitle">天天</span>
+                <span class="vinyl-label-artist" id="vinylArtist">陶喆</span>
+              </div>
+            </div>
+            <div class="vinyl-arm" id="vinylArm"></div>
+            <div class="vinyl-ring"></div>
+          </div>
+          <div class="track-list" id="trackList">
+            <div class="track-item active" data-index="0"
+                 data-color="#ff5b35"
+                 data-title="天天" data-artist="陶喆"
+                 data-album="《I'm OK》" data-year="1999"
+                 data-lyric="天天都需要你爱，我的心思由你猜">
+              <span class="track-num">01</span>
+              <div class="track-info">
+                <strong class="track-name">天天</strong>
+                <em class="track-artist">陶喆 · I'm OK · 1999</em>
+                <p class="track-lyric-preview">天天都需要你爱，我的心思由你猜</p>
+              </div>
+              <div class="track-eq"><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="track-item" data-index="1"
+                 data-color="#67d8ff"
+                 data-title="我们俩" data-artist="郭顶"
+                 data-album="《微微》" data-year="2016"
+                 data-lyric="我们在一个没有风的天，说要去一个没有人的海边">
+              <span class="track-num">02</span>
+              <div class="track-info">
+                <strong class="track-name">我们俩</strong>
+                <em class="track-artist">郭顶 · 微微 · 2016</em>
+                <p class="track-lyric-preview">我们在一个没有风的天</p>
+              </div>
+              <div class="track-eq"><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="track-item" data-index="2"
+                 data-color="#d7ff49"
+                 data-title="蝴蝶" data-artist="陶喆"
+                 data-album="《黑色柳丁》" data-year="2002"
+                 data-lyric="每次一见到你，心里好平静，就像一只蝴蝶飞过废墟">
+              <span class="track-num">03</span>
+              <div class="track-info">
+                <strong class="track-name">蝴蝶</strong>
+                <em class="track-artist">陶喆 · 黑色柳丁 · 2002</em>
+                <p class="track-lyric-preview">就像一只蝴蝶飞过废墟</p>
+              </div>
+              <div class="track-eq"><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="track-item" data-index="3"
+                 data-color="#ff6b9d"
+                 data-title="爱爱爱" data-artist="方大同"
+                 data-album="《爱爱爱》" data-year="2006"
+                 data-lyric="有一天翻开辞海找不到爱，花不开树不摆还是更畅快">
+              <span class="track-num">04</span>
+              <div class="track-info">
+                <strong class="track-name">爱爱爱</strong>
+                <em class="track-artist">方大同 · 爱爱爱 · 2006</em>
+                <p class="track-lyric-preview">有一天翻开辞海找不到爱</p>
+              </div>
+              <div class="track-eq"><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="track-item" data-index="4"
+                 data-color="#c084fc"
+                 data-title="Love Song" data-artist="方大同"
+                 data-album="《未来》" data-year="2007"
+                 data-lyric="Love song，一直想写一首 love song，你给了我一首 love song">
+              <span class="track-num">05</span>
+              <div class="track-info">
+                <strong class="track-name">Love Song</strong>
+                <em class="track-artist">方大同 · 未来 · 2007</em>
+                <p class="track-lyric-preview">一直想写一首 love song</p>
+              </div>
+              <div class="track-eq"><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+          </div>
+        </section>
+        <div class="lyric-particles" id="lyricParticles"></div>
+        <div class="lyric-curtain" id="lyricCurtain">
+          <button class="lyric-curtain-close" id="lyricCurtainClose">&times;</button>
+          <div class="lyric-curtain-content">
+            <span class="lyric-curtain-label" id="curtainLabel"></span>
+            <h2 class="lyric-curtain-title" id="curtainTitle"></h2>
+            <p class="lyric-curtain-text" id="curtainText"></p>
+            <span class="lyric-curtain-meta" id="curtainMeta"></span>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="tpl-thoughts">
+      <div class="sub-page sub-page--thoughts">
+        <button class="page-back">&larr; 返回入口</button>
+        <header class="sub-hero">
+          <span>Archive 03</span>
+          <h1>碎片<br /><em>手稿</em></h1>
+          <p>散落的句子，暂时钉在墙上。</p>
+        </header>
+        <section class="manuscript-wall">
+          <article class="manuscript-card" style="--delay: 0">
+            <div class="manuscript-pin"></div>
+            <time>2026.05</time>
+            <p>好的设计是看不见的。伟大的设计是忘不掉的。</p>
+            <span class="manuscript-tag">设计</span>
+          </article>
+          <article class="manuscript-card manuscript-card--wide" style="--delay: 1">
+            <div class="manuscript-pin"></div>
+            <time>2026.04</time>
+            <p>最好的界面像是在呼吸。出现和消失都有自己的节奏。</p>
+            <span class="manuscript-tag">界面</span>
+          </article>
+          <article class="manuscript-card" style="--delay: 2">
+            <div class="manuscript-pin"></div>
+            <time>2026.03</time>
+            <p>留白不是空。是音符之间的沉默。</p>
+            <span class="manuscript-tag">美学</span>
+          </article>
+          <article class="manuscript-card manuscript-card--tall" style="--delay: 3">
+            <div class="manuscript-pin"></div>
+            <time>2026.02</time>
+            <p>做东西的时候时间过得特别快。一抬头，天亮了。</p>
+            <span class="manuscript-tag">创造</span>
+          </article>
+          <article class="manuscript-card" style="--delay: 4">
+            <div class="manuscript-pin"></div>
+            <time>2026.01</time>
+            <p>新的一年没有 resolutions。只有一个安静的承诺：多注意。</p>
+            <span class="manuscript-tag">新年</span>
+          </article>
+          <article class="manuscript-card manuscript-card--accent" style="--delay: 5">
+            <div class="manuscript-pin"></div>
+            <time>2025.12</time>
+            <p>写代码和写文字很像，都是在找一个最准确的表达。</p>
+            <span class="manuscript-tag">代码</span>
+          </article>
+        </section>
+        <div class="manuscript-footer">
+          <span class="manuscript-count">6 fragments</span>
+          <span class="manuscript-hint">hover to peek</span>
+        </div>
+      </div>
+    </template>
+
+    <template id="tpl-contact">
+      <div class="sub-page sub-page--contact">
+        <button class="page-back">&larr; 返回入口</button>
+        <header class="sub-hero">
+          <span>Archive 04</span>
+          <h1>联系<br /><em>信号台</em></h1>
+          <p>随时欢迎聊聊设计、音乐，或者任何有意思的东西。</p>
+        </header>
+        <section class="signal-board">
+          <button class="signal-link" id="subChatTrigger">
+            <span>Persona Echo</span>
+            <strong>和数字分身聊聊</strong>
+          </button>
+          <a class="signal-link" href="mailto:2689573676@qq.com">
+            <span>Email</span>
+            <strong>2689573676@qq.com</strong>
+          </a>
+          <a class="signal-link" href="https://github.com/Andiii208" target="_blank" rel="noreferrer">
+            <span>GitHub</span>
+            <strong>@Andiii208</strong>
+          </a>
+          <a class="signal-link" href="https://xhslink.com/m/5JbZ80hRS0B" target="_blank" rel="noreferrer">
+            <span>小红书</span>
+            <strong>小红书主页</strong>
+          </a>
+          <a class="signal-link" href="https://v.douyin.com/Zn47Gqcug0Q/" target="_blank" rel="noreferrer">
+            <span>抖音</span>
+            <strong>抖音主页</strong>
+          </a>
+        </section>
+      </div>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+    <script src="three-scene.js"></script>
+    <script src="main.js"></script>
+    <script src="chat.js"></script>
+    <script src="transition.js"></script>
+  </body>
+</html>
