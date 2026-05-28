@@ -123,7 +123,7 @@
           <button class="world-card" data-page="photography">
             <span class="card-index">Room A</span>
             <strong>光影笔记</strong>
-            <p>抽象影像、取景框、还没被上传的照片。</p>
+            <p>抽象影像、取景框、被定格的光影碎片。</p>
             <i>enter</i>
           </button>
           <button class="world-card" data-page="coding">
@@ -213,6 +213,55 @@
           <p class="contact-footer">
             &copy; 2026 Andiii · <span id="footerTime"></span>
           </p>
+        </div>
+      </section>
+
+      <section class="section guestbook" id="guestbook" data-room="05">
+        <div class="guestbook-stage">
+          <div class="section-label">
+            <span>Gallery 05</span>
+            <strong>留言墙</strong>
+          </div>
+          <p class="section-small">在出口处的墙壁上贴一张便条</p>
+          <h2 class="guestbook-title">Guestbook</h2>
+
+          <form class="guestbook-form" id="guestbookForm" autocomplete="off">
+            <div class="guestbook-form-row">
+              <input
+                class="guestbook-input"
+                type="text"
+                id="guestName"
+                placeholder="你的名字（可选）"
+                maxlength="30"
+              />
+              <span class="guestbook-input-line"></span>
+            </div>
+            <div class="guestbook-form-row">
+              <textarea
+                class="guestbook-input guestbook-textarea"
+                id="guestMessage"
+                placeholder="写点什么…"
+                maxlength="300"
+                rows="1"
+                required
+              ></textarea>
+              <span class="guestbook-input-line"></span>
+            </div>
+            <div class="guestbook-form-foot">
+              <span class="guestbook-counter" id="charCounter">0 / 300</span>
+              <button class="guestbook-submit" type="submit" id="guestbookSubmit">
+                <span>贴上去</span>
+                <i>↗</i>
+              </button>
+            </div>
+          </form>
+
+          <div class="guestbook-wall" id="guestbookWall">
+            <div class="guestbook-empty" id="guestbookEmpty">
+              <span class="guestbook-empty-icon">◇</span>
+              <p>墙上还空着，来做第一个留言的人吧</p>
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -604,5 +653,6 @@
     <script src="main.js"></script>
     <script src="chat.js"></script>
     <script src="transition.js"></script>
+    <script src="comments.js"></script>
   </body>
 </html>

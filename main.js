@@ -331,6 +331,7 @@
     ".printer-led", ".printer-label",
     ".printer-slot", ".receipt-header strong",
     ".thoughts-layout",
+    ".guestbook", ".guestbook-title", ".guestbook-note",
   ];
 
   function initAnimationObserver() {
