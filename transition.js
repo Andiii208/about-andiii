@@ -96,12 +96,52 @@
     if (pageContainer.classList.contains("page-photography")) {
       window.museumUi?.initPhotoLightbox?.();
       initLazyImages(pageContainer);
+      fillPhotoGridGap(pageContainer);
     }
     if (pageContainer.classList.contains("page-about")) {
       window.museumUi?.initAboutTime?.();
     }
     if (pageContainer.classList.contains("page-music")) {
       window.museumUi?.initSoundRoom?.();
+    }
+  }
+
+  function fillPhotoGridGap(container) {
+    const gallery = container.querySelector(".photo-gallery");
+    if (!gallery) return;
+
+    // 移除已有的占位元素
+    gallery.querySelectorAll(".photo-placeholder").forEach((el) => el.remove());
+
+    // 获取所有照片项目
+    const items = gallery.querySelectorAll(".photo-item");
+    if (!items.length) return;
+
+    // 计算列数（根据网格样式）
+    const style = getComputedStyle(gallery);
+    const columns = style.gridTemplateColumns.split(" ").length;
+
+    // 计算占用的单元格数
+    let totalCells = 0;
+    items.forEach((item) => {
+      const colSpan = item.classList.contains("photo-item--wide") ? 2 : 1;
+      const rowSpan = item.classList.contains("photo-item--tall") ? 2 : 1;
+      totalCells += colSpan * rowSpan;
+    });
+
+    // 计算当前行已占用的单元格，找出缺口
+    const currentRowCells = totalCells % columns;
+    const gapCount = currentRowCells === 0 ? 0 : columns - currentRowCells;
+
+    // 只在桌面端添加占位（手机端无缺口）
+    if (gapCount > 0 && window.innerWidth > 768) {
+      const placeholderTexts = ["coming soon", "to be continued", "stay tuned"];
+      for (let i = 0; i < gapCount; i++) {
+        const placeholder = document.createElement("article");
+        placeholder.className = "photo-item photo-placeholder";
+        placeholder.textContent = placeholderTexts[i % placeholderTexts.length];
+        gallery.appendChild(placeholder);
+      }
     }
   }
 
