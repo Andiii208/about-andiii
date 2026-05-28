@@ -3264,10 +3264,17 @@ main,
 }
 
 .guestbook-stage {
-  max-width: 48rem;
+  max-width: 76rem;
   margin: 0 auto;
+  display: grid;
+  justify-items: start;
   position: relative;
   z-index: 1;
+}
+
+.guestbook-form,
+.guestbook-wall {
+  width: min(100%, 42rem);
 }
 
 .guestbook-title {
