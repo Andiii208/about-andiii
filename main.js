@@ -38,8 +38,13 @@
     if (!cursor || !follower || window.innerWidth <= 900) return;
     const pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     const trail = { x: pointer.x, y: pointer.y };
+    const cursorState = { paused: false };
     document.addEventListener("mousemove", (event) => updatePointer(pointer, event));
-    requestAnimationFrame(() => moveCursor(cursor, follower, pointer, trail));
+    document.addEventListener("visibilitychange", () => {
+      cursorState.paused = document.hidden;
+      if (!cursorState.paused) requestAnimationFrame(() => moveCursor(cursor, follower, pointer, trail, cursorState));
+    });
+    requestAnimationFrame(() => moveCursor(cursor, follower, pointer, trail, cursorState));
     bindCursorTargets();
     initCursorRegions();
   }
@@ -57,20 +62,27 @@
     pointer.y = event.clientY;
   }
 
-  function moveCursor(cursor, follower, pointer, trail) {
+  function moveCursor(cursor, follower, pointer, trail, cursorState) {
+    if (cursorState?.paused) return;
     cursor.style.transform = `translate(${pointer.x}px, ${pointer.y}px) translate(-50%, -50%)`;
     trail.x += (pointer.x - trail.x) * 0.12;
     trail.y += (pointer.y - trail.y) * 0.12;
     follower.style.transform = `translate(${trail.x}px, ${trail.y}px) translate(-50%, -50%)`;
-    requestAnimationFrame(() => moveCursor(cursor, follower, pointer, trail));
+    requestAnimationFrame(() => moveCursor(cursor, follower, pointer, trail, cursorState));
   }
 
   function bindCursorTargets() {
     const targets = selectAll("a, button, input, .statement-panel");
     targets.forEach((target) => {
+      if (target._cursorBound) return;
+      target._cursorBound = true;
       target.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
       target.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
     });
+  }
+
+  function rebindCursorTargets() {
+    bindCursorTargets();
   }
 
   function initIntroAnimations() {
@@ -277,6 +289,21 @@
       ease: "none",
       scrollTrigger: { trigger: "#hero", start: "top top", end: "60% top", scrub: 1 },
     });
+
+    /* variable font optical sizing: 96 → 24 as user scrolls past hero */
+    window.gsap.to("#heroTitle", {
+      fontVariationSettings: '"opsz" 24',
+      ease: "none",
+      scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 1 },
+    });
+  }
+
+  function initSoundFeedback() {
+    if (!window.museumSound) return;
+    selectAll("a, button, .world-card, .thought-tile, .archive-item").forEach((el) => {
+      el.addEventListener("mouseenter", () => window.museumSound.hoverSound());
+      el.addEventListener("click", () => window.museumSound.clickSound());
+    });
   }
 
   function init() {
@@ -291,6 +318,33 @@
     initTilt();
     initFooterTime();
     initAboutTime();
+    initSoundFeedback();
+    initAnimationObserver();
+  }
+
+  const infiniteAnimSelectors = [
+    ".about-line--1", ".about-line--2", ".statement-orbit",
+    ".contact", ".contact-title",
+    ".contact-footer span", ".about-avatar-ring",
+    ".about-status-dot", ".project-rail",
+    ".sub-hero", ".sub-hero span", ".sub-hero h1",
+    ".printer-led", ".printer-label",
+    ".printer-slot", ".receipt-header strong",
+    ".thoughts-layout",
+  ];
+
+  function initAnimationObserver() {
+    if (!("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        entry.target.classList.toggle("anim-active", entry.isIntersecting);
+      }),
+      { rootMargin: "100px" },
+    );
+    selectAll(infiniteAnimSelectors.join(", ")).forEach((el) => {
+      el.setAttribute("data-animate-infinite", "");
+      observer.observe(el);
+    });
   }
 
   function initAboutTime() {
@@ -308,7 +362,138 @@
     setInterval(updateTime, 1000);
   }
 
-  window.museumUi = { initNavigationCards, initTilt, initFooterTime, scrollToSection, initPhotoLightbox, initAboutTime };
+  function initSoundRoom() {
+    const trackList = select("#trackList");
+    const vinylLabel = select("#vinylLabel");
+    const vinylTitle = select("#vinylTitle");
+    const vinylArtist = select("#vinylArtist");
+    const vinylGlow = select("#vinylGlow");
+    const lyricCurtain = select("#lyricCurtain");
+    const curtainClose = select("#lyricCurtainClose");
+    const curtainTitle = select("#curtainTitle");
+    const curtainText = select("#curtainText");
+    const curtainLabel = select("#curtainLabel");
+    const curtainMeta = select("#curtainMeta");
+    const particlesContainer = select("#lyricParticles");
+    if (!trackList) return;
+
+    const tracks = [
+      { title: "天天", artist: "陶喆", album: "《I'm OK》", year: "1999", color: "#ff5b35",
+        lyric: "那马路上天天都在塞\n而每个人天天在忍耐\n没有你日子很黑白\n原来这样就是恋爱",
+        fragments: ["那马路上天天都在塞", "而每个人天天在忍耐", "原来这样就是恋爱"] },
+      { title: "我们俩", artist: "郭顶", album: "《微微》", year: "2016", color: "#67d8ff",
+        lyric: "你在左边\n我紧靠右\n第一张照片\n不太敢亲密的",
+        fragments: ["你在左边", "我紧靠右", "第一张照片"] },
+      { title: "蝴蝶", artist: "陶喆", album: "《黑色柳丁》", year: "2002", color: "#d7ff49",
+        lyric: "每次一见到你\n心里好平静\n就像一只蝴蝶\n飞过废墟",
+        fragments: ["每次一见到你", "心里好平静", "一只蝴蝶飞过废墟"] },
+      { title: "爱爱爱", artist: "方大同", album: "《爱爱爱》", year: "2006", color: "#ff6b9d",
+        lyric: "有一天翻开辞海找不到爱\n花不开树不摆还是更畅快\n爱还是会期待\n还是觉得孤单太失败",
+        fragments: ["翻开辞海找不到爱", "花不开树不摆", "孤单太失败"] },
+      { title: "Love Song", artist: "方大同", album: "《未来》", year: "2007", color: "#c084fc",
+        lyric: "Love song\n一直想写一首 love song\n你给了我一首 love song\n那旋律让我疯狂",
+        fragments: ["一直想写一首 love song", "你给了我一首 love song", "那旋律让我疯狂"] },
+    ];
+
+    let currentIndex = 0;
+    let particleInterval = null;
+
+    function selectTrack(index) {
+      currentIndex = index;
+      const track = tracks[index];
+
+      // 更新 active 状态
+      trackList.querySelectorAll(".track-item").forEach((item, i) => {
+        item.classList.toggle("active", i === index);
+        item.style.setProperty("--track-item-color", i === index ? track.color : "");
+      });
+
+      // 更新唱片标签
+      if (vinylTitle) vinylTitle.textContent = track.title;
+      if (vinylArtist) vinylArtist.textContent = track.artist;
+      if (vinylLabel) vinylLabel.style.setProperty("--track-color", track.color);
+
+      // 更新全局 CSS 变量
+      document.documentElement.style.setProperty("--track-color", track.color);
+
+      // 更新发光效果
+      if (vinylGlow) vinylGlow.style.background = `radial-gradient(circle, ${track.color} 0%, transparent 70%)`;
+
+      // 重启歌词粒子
+      spawnParticles(track.fragments);
+    }
+
+    function spawnParticles(fragments) {
+      if (particleInterval) clearInterval(particleInterval);
+      if (!particlesContainer) return;
+      particlesContainer.innerHTML = "";
+
+      let count = 0;
+      particleInterval = setInterval(() => {
+        if (count > 16) { clearInterval(particleInterval); return; }
+        const particle = document.createElement("span");
+        particle.className = "lyric-particle";
+        particle.textContent = fragments[count % fragments.length];
+        const size = 0.7 + Math.random() * 0.5;
+        particle.style.left = `${Math.random() * 80 + 10}%`;
+        particle.style.top = `${Math.random() * 70 + 15}%`;
+        particle.style.fontSize = `clamp(${size}rem, 1.2vw, ${size + 0.3}rem)`;
+        particle.style.animationDelay = `${Math.random() * 2.5}s`;
+        particle.style.animationDuration = `${7 + Math.random() * 7}s`;
+        particle.style.transform = `rotate(${(Math.random() - 0.5) * 8}deg)`;
+        particlesContainer.appendChild(particle);
+        count++;
+      }, 1200);
+    }
+
+    function openCurtain(index) {
+      const track = tracks[index];
+      if (!lyricCurtain) return;
+      lyricCurtain.style.setProperty("--track-color", track.color);
+      lyricCurtain.style.background = `rgba(5, 5, 6, 0.96)`;
+      if (curtainLabel) curtainLabel.textContent = `${track.artist} · ${track.album}`;
+      if (curtainTitle) curtainTitle.textContent = track.title;
+      if (curtainMeta) curtainMeta.textContent = `${track.year} · ${track.album}`;
+      if (curtainText) {
+        const lines = track.lyric.split("\n");
+        curtainText.innerHTML = lines.map(
+          (line, i) => `<span class="lyric-line" style="transition-delay: ${0.4 + i * 0.12}s">${line}</span>`
+        ).join("");
+      }
+      lyricCurtain.classList.add("open");
+      window.setTimeout(() => {
+        lyricCurtain.style.background = `linear-gradient(135deg, rgba(5, 5, 6, 0.96), ${track.color}15)`;
+      }, 600);
+    }
+
+    function closeCurtain() {
+      if (lyricCurtain) lyricCurtain.classList.remove("open");
+    }
+
+    // 绑定事件
+    trackList.querySelectorAll(".track-item").forEach((item, index) => {
+      item.addEventListener("click", () => {
+        if (index === currentIndex) {
+          openCurtain(index);
+        } else {
+          selectTrack(index);
+        }
+      });
+      item.addEventListener("dblclick", () => openCurtain(index));
+    });
+
+    if (curtainClose) curtainClose.addEventListener("click", closeCurtain);
+    if (lyricCurtain) {
+      lyricCurtain.addEventListener("click", (e) => {
+        if (e.target === lyricCurtain) closeCurtain();
+      });
+    }
+
+    // 初始选中第一首
+    selectTrack(0);
+  }
+
+  window.museumUi = { initNavigationCards, initTilt, initFooterTime, scrollToSection, initPhotoLightbox, initAboutTime, initSoundRoom, rebindCursorTargets };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();

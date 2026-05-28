@@ -91,6 +91,7 @@
     bindSubChat(pageContainer);
     window.museumUi?.initNavigationCards?.();
     window.museumUi?.initTilt?.();
+    window.museumUi?.rebindCursorTargets?.();
     animateSubPage(pageContainer);
     if (pageContainer.classList.contains("page-photography")) {
       window.museumUi?.initPhotoLightbox?.();
@@ -98,6 +99,9 @@
     }
     if (pageContainer.classList.contains("page-about")) {
       window.museumUi?.initAboutTime?.();
+    }
+    if (pageContainer.classList.contains("page-music")) {
+      window.museumUi?.initSoundRoom?.();
     }
   }
 

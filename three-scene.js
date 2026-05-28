@@ -9,7 +9,7 @@
   const scene = new window.THREE.Scene();
   const camera = createCamera();
   const renderer = createRenderer(canvas);
-  const state = { mouseX: 0, mouseY: 0, paused: false };
+  const state = { mouseX: 0, mouseY: 0, paused: false, scrollY: 0, time: 0 };
   const ambient = createAmbientParticles(isMobile ? 100 : 250);
 
   scene.add(ambient);
@@ -40,18 +40,23 @@
 
   function createAmbientParticles(count) {
     const positions = new Float32Array(count * 3);
-    for (let index = 0; index < count; index++)
+    const sizes = new Float32Array(count);
+    for (let index = 0; index < count; index++) {
       fillAmbientPosition(positions, index);
+      sizes[index] = 0.8 + Math.random() * 0.4;
+    }
     const geometry = new window.THREE.BufferGeometry();
     geometry.setAttribute(
       "position",
       new window.THREE.BufferAttribute(positions, 3),
     );
+    geometry.setAttribute("size", new window.THREE.BufferAttribute(sizes, 1));
     const material = new window.THREE.PointsMaterial({
       size: 0.015,
       color: 0xf2eadb,
       transparent: true,
       opacity: 0.22,
+      sizeAttenuation: true,
     });
     return new window.THREE.Points(geometry, material);
   }
@@ -68,6 +73,12 @@
       updateMouse(currentState, event),
     );
     window.addEventListener("resize", () => resize(rendererRef, cameraRef));
+    window.addEventListener("scroll", () => {
+      currentState.scrollY = window.scrollY;
+    }, { passive: true });
+    document.addEventListener("visibilitychange", () => {
+      currentState.paused = document.hidden;
+    });
     window.galleryScene = {
       pause: () => setScenePaused(currentState, ambientParticles, true),
       resume: () => setScenePaused(currentState, ambientParticles, false),
@@ -91,18 +102,32 @@
   }
 
   function animate() {
-    if (state.paused) {
-      requestAnimationFrame(animate);
-      return;
-    }
     requestAnimationFrame(animate);
+    if (state.paused) return;
+
+    state.time += 0.016;
+
+    /* base rotation */
     ambient.rotation.y += 0.0008;
+
+    /* particle breathing: oscillate base opacity */
+    const breathe = 0.22 + Math.sin(state.time * 0.8) * 0.06;
+    ambient.material.opacity = breathe;
 
     /* mouse-reactive particle drift */
     const targetX = state.mouseX * 0.3;
     const targetY = state.mouseY * 0.3;
     ambient.position.x += (targetX - ambient.position.x) * 0.02;
     ambient.position.y += (targetY - ambient.position.y) * 0.02;
+
+    /* mouse proximity: brighten when cursor is near center */
+    const mouseDist = Math.sqrt(state.mouseX * state.mouseX + state.mouseY * state.mouseY);
+    const proximityBoost = Math.max(0, 1 - mouseDist) * 0.12;
+    ambient.material.opacity = breathe + proximityBoost;
+
+    /* scroll parallax: subtle vertical offset */
+    const scrollOffset = state.scrollY * 0.0003;
+    ambient.position.y += (-scrollOffset - ambient.position.y) * 0.01;
 
     renderer.render(scene, camera);
   }
