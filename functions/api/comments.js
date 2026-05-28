@@ -184,7 +184,7 @@ async function generateReply(env, guestName, message) {
           },
         ],
         temperature: 0.9,
-        max_tokens: 120,
+        max_tokens: 300,
         stream: false,
       }),
     });
@@ -195,7 +195,8 @@ async function generateReply(env, guestName, message) {
     }
 
     const data = await response.json();
-    return data.choices?.[0]?.message?.content?.trim() || null;
+    const choice = data.choices?.[0]?.message;
+    return choice?.content?.trim() || choice?.reasoning_content?.trim() || null;
   } catch (error) {
     console.error('Reply generation error:', error);
     return null;
