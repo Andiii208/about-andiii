@@ -35,7 +35,7 @@
       <p class="guestbook-note-message">${escapeHtml(comment.message)}</p>
       ${comment.reply ? `
         <div class="guestbook-reply">
-          <span class="guestbook-reply-label">Andiii 回复</span>
+          <span class="guestbook-reply-label">Andiii的数字分身</span>
           <p class="guestbook-reply-text">${escapeHtml(comment.reply)}</p>
         </div>
       ` : ""}
@@ -148,7 +148,7 @@
       updateCounter();
 
       if (data.reply) {
-        showToast("Andiii 已回复你的留言", "success");
+        showToast("数字分身已回复你的留言", "success");
       } else {
         showToast("已贴上", "success");
       }

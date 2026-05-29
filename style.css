@@ -1172,7 +1172,14 @@ main,
   overflow: hidden;
 }
 
-.contact::before {
+.contact-stage {
+  display: grid;
+  justify-items: start;
+}
+.contact-stage > .section-label {
+  width: 100%;
+}
+.contact-stage::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -1183,16 +1190,13 @@ main,
   border-radius: 50%;
   transform: translateY(-50%);
   animation: contactCircle 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
 }
 
 @keyframes contactCircle {
   0%, 100% { transform: translateY(-50%) scale(1) rotate(0deg); opacity: 0.5; }
   50% { transform: translateY(-50%) scale(1.1) rotate(180deg); opacity: 0.3; }
-}
-
-.contact-stage {
-  display: grid;
-  justify-items: start;
 }
 
 .contact-title {
@@ -3110,11 +3114,6 @@ main,
   .project-exhibit {
     grid-template-columns: 1fr;
   }
-
-  .receipt-overlay {
-    place-items: start;
-    padding-top: 2rem;
-  }
 }
 
 @media (max-width: 520px) {
@@ -3138,7 +3137,7 @@ main,
     grid-template-columns: repeat(2, max-content);
     gap: 0.35rem 0.75rem;
     position: absolute;
-    left: 4.2rem;
+    right: 0;
     top: 0.1rem;
   }
 
@@ -3231,19 +3230,6 @@ main,
   overflow: hidden;
 }
 
-/* decorative grid */
-.guestbook::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(242, 234, 219, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(242, 234, 219, 0.03) 1px, transparent 1px);
-  background-size: 4rem 4rem;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 70%);
-  pointer-events: none;
-}
-
 /* animated accent orb */
 .guestbook::after {
   content: "";
@@ -3270,6 +3256,20 @@ main,
   justify-items: start;
   position: relative;
   z-index: 1;
+}
+.guestbook-stage > .section-label {
+  width: 100%;
+}
+.guestbook-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(242, 234, 219, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242, 234, 219, 0.03) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 70%);
+  pointer-events: none;
 }
 
 .guestbook-form,
@@ -3532,8 +3532,8 @@ main,
 .guestbook-reply {
   margin-top: 1rem;
   padding: 0.8rem 1rem;
-  border-left: 2px solid var(--ember);
-  background: rgba(255, 91, 53, 0.04);
+  border-left: 2px solid var(--acid);
+  background: rgba(215, 255, 73, 0.04);
   border-radius: 0 2px 2px 0;
   position: relative;
   animation: replyIn 0.5s var(--ease) 0.15s backwards;
@@ -3548,7 +3548,7 @@ main,
   display: block;
   font-family: var(--font-mono);
   font-size: 0.6rem;
-  color: var(--ember);
+  color: var(--acid);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 0.35rem;
