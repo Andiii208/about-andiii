@@ -79,7 +79,7 @@ const RATE_LIMIT_SEC = 60;
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
   'Content-Type': 'application/json',
 };
 
@@ -160,6 +160,39 @@ export async function onRequestPost(context) {
   }
 }
 
+export async function onRequestDelete(context) {
+  const { request, env } = context;
+  try {
+    const url = new URL(request.url);
+    const key = url.searchParams.get('key');
+
+    if (key !== env.ADMIN_KEY) {
+      return json({ error: 'Unauthorized' }, 401);
+    }
+
+    const targetId = url.searchParams.get('id');
+    if (!targetId) {
+      return json({ error: 'Missing comment id' }, 400);
+    }
+
+    const raw = await env.COMMENTS_KV.get(COMMENTS_KEY);
+    const comments = raw ? JSON.parse(raw) : [];
+    const index = comments.findIndex((c) => c.id === targetId);
+
+    if (index === -1) {
+      return json({ error: 'Comment not found' }, 404);
+    }
+
+    comments.splice(index, 1);
+    await env.COMMENTS_KV.put(COMMENTS_KEY, JSON.stringify(comments));
+
+    return json({ deleted: targetId });
+  } catch (error) {
+    console.error('Comments delete error:', error);
+    return json({ error: 'Failed to delete comment' }, 500);
+  }
+}
+
 async function generateReply(env, guestName, message) {
   const apiKey = env.AI_API_KEY;
   const apiBase = env.AI_API_BASE || 'https://api.deepseek.com/v1';
@@ -208,8 +241,12 @@ export async function onRequestOptions() {
     status: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },
   });
 }
+
+// This file uses Cloudflare Pages Functions onRequest* exports.
+// DELETE requires ADMIN_KEY from env (set in wrangler.toml [vars]).
+// Access admin panel at /admin.html
