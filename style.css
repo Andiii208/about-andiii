@@ -2823,35 +2823,6 @@ main,
   transition: clip-path 0.6s var(--ease) 0.25s, opacity 0.3s var(--ease) 0.25s;
 }
 
-.receipt-paper::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 5%;
-  width: 90%;
-  height: 1px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--ink) 0 4px,
-    transparent 4px 8px
-  );
-  opacity: 0.25;
-}
-
-.receipt-paper::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 5%;
-  width: 90%;
-  height: 1px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--ink) 0 4px,
-    transparent 4px 8px
-  );
-  opacity: 0.25;
-}
 
 .receipt-close {
   float: right;
@@ -2869,7 +2840,6 @@ main,
   display: grid;
   gap: 0.25rem;
   padding-bottom: 1rem;
-  border-bottom: 1px dashed rgba(21, 17, 11, 0.4);
   font-family: var(--font-mono);
   text-align: center;
 }
