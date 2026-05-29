@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>留言管理 · Andiii</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #050506;
+      color: #f2eadb;
+      font-family: "Outfit", "Noto Serif SC", system-ui, sans-serif;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    h1 {
+      font-family: "Bodoni Moda", "Noto Serif SC", serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 0.5rem;
+    }
+    .subtitle { color: rgba(242,234,219,0.5); font-size: 0.85rem; margin-bottom: 2rem; }
+    .toolbar { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+    input, button {
+      background: rgba(244,239,226,0.06);
+      border: 1px solid rgba(242,234,219,0.16);
+      color: #f2eadb;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      border-radius: 2px;
+      outline: none;
+    }
+    button {
+      cursor: pointer;
+      font-family: "IBM Plex Mono", monospace;
+      transition: all 0.2s;
+    }
+    button:hover { border-color: #d7ff49; color: #d7ff49; }
+    button.danger:hover { border-color: #ff5b35; color: #ff5b35; }
+    .list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1rem; border: 1px solid rgba(242,234,219,0.1); border-radius: 2px;
+      background: rgba(244,239,226,0.025);
+    }
+    .item-meta { flex-shrink: 0; width: 100px; }
+    .item-name { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; color: #d7ff49; }
+    .item-time { font-family: "IBM Plex Mono", monospace; font-size: 0.6rem; color: rgba(242,234,219,0.4); }
+    .item-body { flex: 1; min-width: 0; }
+    .item-msg { font-size: 0.9rem; line-height: 1.6; margin-bottom: 0.5rem; }
+    .item-reply {
+      padding-left: 0.75rem; border-left: 2px solid #ff5b35;
+      font-size: 0.82rem; font-style: italic; color: rgba(242,234,219,0.7);
+    }
+    .item-reply::before { content: "Andiii 回复："; display: block; font-family: "IBM Plex Mono", monospace; font-size: 0.6rem; color: #ff5b35; text-transform: uppercase; margin-bottom: 0.2rem; font-style: normal; }
+    .del-btn { flex-shrink: 0; padding: 0.3rem 0.7rem; font-size: 0.7rem; }
+    .empty { color: rgba(242,234,219,0.3); text-align: center; padding: 4rem 0; }
+    .toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      padding: 0.6rem 1.4rem; border-radius: 2px; font-size: 0.85rem;
+      pointer-events: none; opacity: 0; transition: opacity 0.3s;
+    }
+    .toast.show { opacity: 1; }
+    .toast.ok { background: rgba(215,255,73,0.12); border: 1px solid rgba(215,255,73,0.3); }
+    .toast.err { background: rgba(255,91,53,0.12); border: 1px solid rgba(255,91,53,0.3); }
+  </style>
+</head>
+<body>
+  <h1>Guestbook Admin</h1>
+  <p class="subtitle">留言墙管理 — 删除不当内容</p>
+
+  <div class="toolbar">
+    <input type="password" id="keyInput" placeholder="Admin Key" />
+    <button id="loadBtn">加载留言</button>
+    <span style="font-size:0.7rem;color:rgba(242,234,219,0.3);align-self:center;" id="status"></span>
+  </div>
+
+  <div class="list" id="list"><div class="empty">输入 Admin Key 并点击加载</div></div>
+
+  <script>
+    const keyInput = document.getElementById('keyInput');
+    const loadBtn = document.getElementById('loadBtn');
+    const listEl = document.getElementById('list');
+    const statusEl = document.getElementById('status');
+    const API = '/api/comments';
+
+    let adminKey = '';
+
+    function toast(msg, ok) {
+      let t = document.querySelector('.toast');
+      if (!t) { t = document.createElement('div'); t.className = 'toast'; document.body.appendChild(t); }
+      t.textContent = msg; t.className = 'toast ' + (ok ? 'ok' : 'err') + ' show';
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    async function load() {
+      adminKey = keyInput.value.trim();
+      if (!adminKey) { toast('请先输入 Admin Key', false); return; }
+
+      statusEl.textContent = '加载中…';
+      try {
+        const res = await fetch(API);
+        const comments = await res.json();
+        if (!Array.isArray(comments)) throw new Error('Invalid response');
+
+        if (comments.length === 0) {
+          listEl.innerHTML = '<div class="empty">暂无留言</div>';
+        } else {
+          listEl.innerHTML = comments.map(c => `
+            <div class="item" id="item-${c.id}">
+              <div class="item-meta">
+                <div class="item-name">${esc(c.name)}</div>
+                <div class="item-time">${fmt(c.time)}</div>
+              </div>
+              <div class="item-body">
+                <div class="item-msg">${esc(c.message)}</div>
+                ${c.reply ? `<div class="item-reply">${esc(c.reply)}</div>` : ''}
+              </div>
+              <button class="del-btn danger" data-id="${c.id}">删除</button>
+            </div>
+          `).join('');
+
+          listEl.querySelectorAll('.del-btn').forEach(btn => {
+            btn.addEventListener('click', () => deleteComment(btn.dataset.id));
+          });
+        }
+        statusEl.textContent = `${comments.length} 条留言`;
+      } catch (e) {
+        statusEl.textContent = '加载失败';
+        toast('加载失败', false);
+      }
+    }
+
+    async function deleteComment(id) {
+      if (!confirm('确认删除这条留言？')) return;
+      try {
+        const res = await fetch(`${API}?id=${id}&key=${encodeURIComponent(adminKey)}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (res.ok) {
+          document.getElementById('item-' + id)?.remove();
+          toast('已删除', true);
+        } else {
+          toast(data.error || '删除失败', false);
+        }
+      } catch {
+        toast('删除失败', false);
+      }
+    }
+
+    function esc(s) {
+      const m = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+      return String(s).replace(/[&<>"']/g, c => m[c]);
+    }
+
+    function fmt(iso) {
+      const d = new Date(iso);
+      return d.toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    loadBtn.addEventListener('click', load);
+    keyInput.addEventListener('keydown', e => { if (e.key === 'Enter') load(); });
+  </script>
+</body>
+</html>
